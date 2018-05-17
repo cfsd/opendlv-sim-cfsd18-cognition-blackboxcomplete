@@ -20,18 +20,18 @@
 #include <cstring>
 
 double NEAT::trait_param_mut_prob = 0;
-double NEAT::trait_mutation_power = 0; // Power of mutation on a signle trait param 
+double NEAT::trait_mutation_power = 0; // Power of mutation on a signle trait param
 double NEAT::linktrait_mut_sig = 0; // Amount that mutation_num changes for a trait change inside a link
-double NEAT::nodetrait_mut_sig = 0; // Amount a mutation_num changes on a link connecting a node that changed its trait 
-double NEAT::weight_mut_power = 0; // The power of a linkweight mutation 
-double NEAT::recur_prob = 0; // Prob. that a link mutation which doesn't have to be recurrent will be made recurrent 
+double NEAT::nodetrait_mut_sig = 0; // Amount a mutation_num changes on a link connecting a node that changed its trait
+double NEAT::weight_mut_power = 0; // The power of a linkweight mutation
+double NEAT::recur_prob = 0; // Prob. that a link mutation which doesn't have to be recurrent will be made recurrent
 double NEAT::disjoint_coeff = 0;
 double NEAT::excess_coeff = 0;
 double NEAT::mutdiff_coeff = 0;
 double NEAT::compat_threshold = 0;
-double NEAT::age_significance = 0; // How much does age matter? 
-double NEAT::survival_thresh = 0; // Percent of ave fitness for survival 
-double NEAT::mutate_only_prob = 0; // Prob. of a non-mating reproduction 
+double NEAT::age_significance = 0; // How much does age matter?
+double NEAT::survival_thresh = 0; // Percent of ave fitness for survival
+double NEAT::mutate_only_prob = 0; // Prob. of a non-mating reproduction
 double NEAT::mutate_random_trait_prob = 0;
 double NEAT::mutate_link_trait_prob = 0;
 double NEAT::mutate_node_trait_prob = 0;
@@ -40,17 +40,17 @@ double NEAT::mutate_toggle_enable_prob = 0;
 double NEAT::mutate_gene_reenable_prob = 0;
 double NEAT::mutate_add_node_prob = 0;
 double NEAT::mutate_add_link_prob = 0;
-double NEAT::interspecies_mate_rate = 0; // Prob. of a mate being outside species 
-double NEAT::mate_multipoint_prob = 0;     
+double NEAT::interspecies_mate_rate = 0; // Prob. of a mate being outside species
+double NEAT::mate_multipoint_prob = 0;
 double NEAT::mate_multipoint_avg_prob = 0;
 double NEAT::mate_singlepoint_prob = 0;
-double NEAT::mate_only_prob = 0; // Prob. of mating without mutation 
-double NEAT::recur_only_prob = 0;  // Probability of forcing selection of ONLY links that are naturally recurrent 
-int NEAT::pop_size = 0;  // Size of population 
-int NEAT::dropoff_age = 0;  // Age where Species starts to be penalized 
-int NEAT::newlink_tries = 0;  // Number of tries mutate_add_link will attempt to find an open link 
-int NEAT::print_every = 0; // Tells to print population to file every n generations 
-int NEAT::babies_stolen = 0; // The number of babies to siphen off to the champions 
+double NEAT::mate_only_prob = 0; // Prob. of mating without mutation
+double NEAT::recur_only_prob = 0;  // Probability of forcing selection of ONLY links that are naturally recurrent
+int NEAT::pop_size = 0;  // Size of population
+int NEAT::dropoff_age = 0;  // Age where Species starts to be penalized
+int NEAT::newlink_tries = 0;  // Number of tries mutate_add_link will attempt to find an open link
+int NEAT::print_every = 0; // Tells to print population to file every n generations
+int NEAT::babies_stolen = 0; // The number of babies to siphen off to the champions
 int NEAT::num_runs = 0;
 //MRandomR250 NEAT::NEATRandGen = MRandomR250(Platform::getRealMilliseconds()); // Random number generator; can pass seed value as argument here
 //MRandomR250 NEAT::NEATRandGen = MRandomR250();
@@ -65,7 +65,7 @@ int NEAT::num_runs = 0;
 //		sz = strcspn(string, set);
 //		if (string[sz] == 0)
 //			return "";
-//		string += (sz + 1);    
+//		string += (sz + 1);
 //	}
 //	sz = strcspn(string, set);
 //	if (sz == 0)
@@ -87,7 +87,7 @@ int NEAT::num_runs = 0;
 //		sz = strcspn(string, set);
 //		if (string[sz] == 0)
 //			return "";
-//		string += (sz + 1);    
+//		string += (sz + 1);
 //	}
 //	const char *startString = string;
 //	while(startIndex <= endIndex--)
@@ -122,13 +122,13 @@ int NEAT::getUnitCount(const char *string, const char *set)
 				count++;
 				last = 0;
 				break;
-			}   
+			}
 		}
 	}
 	if(last)
 		count++;
 	return count;
-}   
+}
 
 bool NEAT::load_neat_params(const char *filename, bool output) {
 
@@ -172,210 +172,210 @@ bool NEAT::load_neat_params(const char *filename, bool output) {
 
 	paramFile>>curword;
 	paramFile>>NEAT::nodetrait_mut_sig;
-	
+
     //strcpy(curword, getUnit(filestring, curwordnum, delimiters));
 	//NEAT::nodetrait_mut_sig = atof(curword);
 	//curwordnum += 2;
-	
+
     paramFile>>curword;
 	paramFile>>NEAT::weight_mut_power;
-	
+
     //strcpy(curword, getUnit(filestring, curwordnum, delimiters));
 	//NEAT::weight_mut_power = atof(curword);
 	//curwordnum += 2;
-	
+
     paramFile>>curword;
 	paramFile>>NEAT::recur_prob;
-	
+
     //strcpy(curword, getUnit(filestring, curwordnum, delimiters));
 	//NEAT::recur_prob = atof(curword);
 	//curwordnum += 2;
-	
+
     paramFile>>curword;
 	paramFile>>NEAT::disjoint_coeff;
-	
+
     //strcpy(curword, getUnit(filestring, curwordnum, delimiters));
 	//NEAT::disjoint_coeff = atof(curword);
 	//curwordnum += 2;
-	
+
     paramFile>>curword;
 	paramFile>>NEAT::excess_coeff;
-	
+
     //strcpy(curword, getUnit(filestring, curwordnum, delimiters));
 	//NEAT::excess_coeff = atof(curword);
 	//curwordnum += 2;
-	
+
     paramFile>>curword;
 	paramFile>>NEAT::mutdiff_coeff;
-	
+
     //strcpy(curword, getUnit(filestring, curwordnum, delimiters));
 	//NEAT::mutdiff_coeff = atof(curword);
 	//curwordnum += 2;
-	
+
     paramFile>>curword;
 	paramFile>>NEAT::compat_threshold;
-	
+
     //strcpy(curword, getUnit(filestring, curwordnum, delimiters));
 	//NEAT::compat_threshold = atof(curword);
 	//curwordnum += 2;
-	
+
     paramFile>>curword;
 	paramFile>>NEAT::age_significance;
-	
+
     //strcpy(curword, getUnit(filestring, curwordnum, delimiters));
 	//NEAT::age_significance = atof(curword);
 	//curwordnum += 2;
-	
+
     paramFile>>curword;
 	paramFile>>NEAT::survival_thresh;
-	
+
     //strcpy(curword, getUnit(filestring, curwordnum, delimiters));
 	//NEAT::survival_thresh = atof(curword);
 	//curwordnum += 2;
-	
+
     paramFile>>curword;
 	paramFile>>NEAT::mutate_only_prob;
-	
+
     //strcpy(curword, getUnit(filestring, curwordnum, delimiters));
 	//NEAT::mutate_only_prob = atof(curword);
 	//curwordnum += 2;
-	
+
     paramFile>>curword;
 	paramFile>>NEAT::mutate_random_trait_prob;
-	
+
     //strcpy(curword, getUnit(filestring, curwordnum, delimiters));
 	//NEAT::mutate_random_trait_prob = atof(curword);
 	//curwordnum += 2;
-	
+
     paramFile>>curword;
 	paramFile>>NEAT::mutate_link_trait_prob;
-	
+
     //strcpy(curword, getUnit(filestring, curwordnum, delimiters));
 	//NEAT::mutate_link_trait_prob = atof(curword);
 	//curwordnum += 2;
-	
+
     paramFile>>curword;
 	paramFile>>NEAT::mutate_node_trait_prob;
-	
+
     //strcpy(curword, getUnit(filestring, curwordnum, delimiters));
 	//NEAT::mutate_node_trait_prob = atof(curword);
 	//curwordnum += 2;
-	
+
     paramFile>>curword;
 	paramFile>>NEAT::mutate_link_weights_prob;
-	
+
     //strcpy(curword, getUnit(filestring, curwordnum, delimiters));
 	//NEAT::mutate_link_weights_prob = atof(curword);
 	//curwordnum += 2;
-	
+
     paramFile>>curword;
 	paramFile>>NEAT::mutate_toggle_enable_prob;
-	
+
     //strcpy(curword, getUnit(filestring, curwordnum, delimiters));
 	//NEAT::mutate_toggle_enable_prob = atof(curword);
 	//curwordnum += 2;
 
 	paramFile>>curword;
 	paramFile>>NEAT::mutate_gene_reenable_prob;
-	
+
     //strcpy(curword, getUnit(filestring, curwordnum, delimiters));
 	//NEAT::mutate_gene_reenable_prob = atof(curword);
 	//curwordnum += 2;
-	
+
     paramFile>>curword;
 	paramFile>>NEAT::mutate_add_node_prob;
-	
+
     //strcpy(curword, getUnit(filestring, curwordnum, delimiters));
 	//NEAT::mutate_add_node_prob = atof(curword);
 	//curwordnum += 2;
-	
+
     paramFile>>curword;
 	paramFile>>NEAT::mutate_add_link_prob;
-	
+
     //strcpy(curword, getUnit(filestring, curwordnum, delimiters));
 	//NEAT::mutate_add_link_prob = atof(curword);
 	//curwordnum += 2;
-	
+
     paramFile>>curword;
 	paramFile>>NEAT::interspecies_mate_rate;
-	
+
     //strcpy(curword, getUnit(filestring, curwordnum, delimiters));
 	//NEAT::interspecies_mate_rate = atof(curword);
 	//curwordnum += 2;
-	
+
     paramFile>>curword;
 	paramFile>>NEAT::mate_multipoint_prob;
-	
+
     //strcpy(curword, getUnit(filestring, curwordnum, delimiters));
 	//NEAT::mate_multipoint_prob = atof(curword);
 	//curwordnum += 2;
-	
+
     paramFile>>curword;
 	paramFile>>NEAT::mate_multipoint_avg_prob;
-	
+
     //strcpy(curword, getUnit(filestring, curwordnum, delimiters));
 	//NEAT::mate_multipoint_avg_prob = atof(curword);
 	//curwordnum += 2;
-	
+
     paramFile>>curword;
 	paramFile>>NEAT::mate_singlepoint_prob;
-	
+
     //strcpy(curword, getUnit(filestring, curwordnum, delimiters));
 	//NEAT::mate_singlepoint_prob = atof(curword);
 	//curwordnum += 2;
-	
+
     paramFile>>curword;
 	paramFile>>NEAT::mate_only_prob;
-	
+
     //strcpy(curword, getUnit(filestring, curwordnum, delimiters));
 	//NEAT::mate_only_prob = atof(curword);
 	//curwordnum += 2;
-	
+
     paramFile>>curword;
 	paramFile>>NEAT::recur_only_prob;
-	
+
     //strcpy(curword, getUnit(filestring, curwordnum, delimiters));
 	//NEAT::recur_only_prob = atof(curword);
 	//curwordnum += 2;
-	
+
     paramFile>>curword;
 	paramFile>>NEAT::pop_size;
-	
+
     //strcpy(curword, getUnit(filestring, curwordnum, delimiters));
 	//NEAT::pop_size = atoi(curword);
 	//curwordnum += 2;
-	
+
     paramFile>>curword;
 	paramFile>>NEAT::dropoff_age;
-	
+
     //strcpy(curword, getUnit(filestring, curwordnum, delimiters));
 	//NEAT::dropoff_age = atoi(curword);
 	//curwordnum += 2;
-	
+
     paramFile>>curword;
 	paramFile>>NEAT::newlink_tries;
-	
+
     //strcpy(curword, getUnit(filestring, curwordnum, delimiters));
 	//NEAT::newlink_tries = atoi(curword);
 	//curwordnum += 2;
-	
+
     paramFile>>curword;
 	paramFile>>NEAT::print_every;
-	
+
     //strcpy(curword, getUnit(filestring, curwordnum, delimiters));
 	//NEAT::print_every = atoi(curword);
 	//curwordnum += 2;
-	
+
     paramFile>>curword;
 	paramFile>>NEAT::babies_stolen;
-	
+
     //strcpy(curword, getUnit(filestring, curwordnum, delimiters));
 	//NEAT::babies_stolen = atoi(curword);
 	//curwordnum += 2;
 
     paramFile>>curword;
 	paramFile>>NEAT::num_runs;
-	
+
 
     if(output) {
 	    printf("trait_param_mut_prob=%f\n",trait_param_mut_prob);
@@ -419,9 +419,9 @@ bool NEAT::load_neat_params(const char *filename, bool output) {
 
 /* Inline Functions in Header file
 int NEAT::randposneg() {
-	if (NEAT::NEATRandGen.randI()%2) 
-		return 1; 
-	else 
+	if (NEAT::NEATRandGen.randI()%2)
+		return 1;
+	else
 		return -1;
 }
 
@@ -458,20 +458,20 @@ double NEAT::gaussrand() {
 
 double NEAT::fsigmoid(double activesum,double slope,double constant) {
 	//RIGHT SHIFTED ---------------------------------------------------------
-	//return (1/(1+(exp(-(slope*activesum-constant))))); //ave 3213 clean on 40 runs of p2m and 3468 on another 40 
+	//return (1/(1+(exp(-(slope*activesum-constant))))); //ave 3213 clean on 40 runs of p2m and 3468 on another 40
 	//41394 with 1 failure on 8 runs
 
 	//LEFT SHIFTED ----------------------------------------------------------
 	//return (1/(1+(exp(-(slope*activesum+constant))))); //original setting ave 3423 on 40 runs of p2m, 3729 and 1 failure also
 
 	//PLAIN SIGMOID ---------------------------------------------------------
-	//return (1/(1+(exp(-activesum)))); //3511 and 1 failure
+	return (1/(1+(exp(-activesum)))); //3511 and 1 failure
 
 	//LEFT SHIFTED NON-STEEPENED---------------------------------------------
 	//return (1/(1+(exp(-activesum-constant)))); //simple left shifted
 
 	//NON-SHIFTED STEEPENED
-	return (1/(1+(exp(-(slope*activesum))))); //Compressed
+	//return (1/(1+(exp(-(slope*activesum))))); //Compressed
 }
 
 double NEAT::oldhebbian(double weight, double maxweight, double active_in, double active_out, double hebb_rate, double pre_rate, double post_rate) {
@@ -620,6 +620,3 @@ double NEAT::hebbian(double weight, double maxweight, double active_in, double a
 	}
 
 }
-
-
-

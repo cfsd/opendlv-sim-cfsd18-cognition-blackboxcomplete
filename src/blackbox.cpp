@@ -59,10 +59,10 @@ BlackBox::BlackBox(std::map<std::string, std::string> commandlineArguments) :
 , m_surfaceId{}
 {
   m_surfaceId = rand();
-  std::cout<<"m_runOK: "<<m_runOK<<std::endl;
+  /*std::cout<<"m_runOK: "<<m_runOK<<std::endl;
   std::cout<<"m_newFrame: "<<m_newFrame<<std::endl;
   std::cout<<"m_directionOK: "<<m_directionOK<<std::endl;
-  std::cout<<"m_newDirectionId: "<<m_newDirectionId<<std::endl;
+  std::cout<<"m_newDirectionId: "<<m_newDirectionId<<std::endl;*/
   setUp();
 }
 
@@ -110,7 +110,7 @@ void BlackBox::tearDown()
 void BlackBox::nextContainer(cluon::data::Envelope &a_container)
 {
   if(a_container.dataType() == opendlv::logic::perception::ObjectProperty::ID()){
-      std::cout << "RECIEVED AN OBJECTPROPERY!" << std::endl;
+      //std::cout << "RECIEVED AN OBJECTPROPERY!" << std::endl;
       auto object = cluon::extractMessage<opendlv::logic::perception::ObjectProperty>(std::move(a_container));
       int objectId = object.objectId();
       auto nConesInFrame = object.property();
@@ -150,12 +150,13 @@ void BlackBox::nextContainer(cluon::data::Envelope &a_container)
       double duration = (m_directionId!=-1)?(dur.count()):(-1.0); // Duration value of type double in seconds OR -1 which prevents running the surface while ignoring messages from an already run frame
       if (duration>m_receiveTimeLimit) { //Only for debug
         std::cout<<"DURATION TIME DIRECTION EXCEEDED"<<std::endl;
+        std::cout<<m_directionFrame.size()<<" directionFrames to run"<<"\n";
+        std::cout<<m_directionFrameBuffer.size()<<" directionFrames in buffer"<<"\n";
       }
       // Run if frame is full or if we have waited to long for the remaining messages
       if ((m_directionFrame.size()==m_nConesInFrame || duration>m_receiveTimeLimit)) { //!m_newFrame && objectId==m_surfaceId &&
         m_directionOK=true;
-        std::cout<<m_directionFrame.size()<<" directionFrames to run"<<"\n";
-        std::cout<<m_directionFrameBuffer.size()<<" directionFrames in buffer"<<"\n";
+
         /*std::cout<<"m_directionOK"<<"\n";*/
       }
   }
@@ -188,12 +189,13 @@ void BlackBox::nextContainer(cluon::data::Envelope &a_container)
     double duration = (m_distanceId!=-1)?(dur.count()):(-1.0); // Duration value of type double in seconds OR -1 which prevents running the surface while ignoring messages from an already run frame
     if (duration>m_receiveTimeLimit) { //Only for debug
       std::cout<<"DURATION TIME DISTANCE EXCEEDED"<<std::endl;
+      std::cout<<m_distanceFrame.size()<<" distanceFrames to run"<<"\n";
+      std::cout<<m_distanceFrameBuffer.size()<<" distanceFrames in buffer"<<"\n";
     }
     // Run if frame is full or if we have waited to long for the remaining messages
     if ((m_distanceFrame.size()==m_nConesInFrame || duration>m_receiveTimeLimit)) { //!m_newFrame && objectId==m_surfaceId &&
       m_distanceOK=true;
-      std::cout<<m_distanceFrame.size()<<" distanceFrames to run"<<"\n";
-      std::cout<<m_distanceFrameBuffer.size()<<" distanceFrames in buffer"<<"\n";
+
       /*std::cout<<"m_distanceOK"<<"\n";*/
     }
   }
@@ -226,17 +228,18 @@ void BlackBox::nextContainer(cluon::data::Envelope &a_container)
     double duration = (m_typeId!=-1)?(dur.count()):(-1.0); // Duration value of type double in seconds OR -1 which prevents running the surface while ignoring messages from an already run frame
     if (duration>m_receiveTimeLimit) { //Only for debug
       std::cout<<"DURATION TIME TYPE EXCEEDED"<<std::endl;
+      std::cout<<m_typeFrame.size()<<" typeFrames to run"<<"\n";
+      std::cout<<m_typeFrameBuffer.size()<<" typeFrames in buffer"<<"\n";
     }
     // Run if frame is full or if we have waited to long for the remaining messages
     if ((m_typeFrame.size()==m_nConesInFrame || duration>m_receiveTimeLimit) && m_runOK) { //!m_newFrame && objectId==m_surfaceId &&
       if (m_directionOK && m_distanceOK) {
         m_runOK = false;
-        std::cout<<"m_runOK"<<std::endl;
+        //std::cout<<"m_runOK"<<std::endl;
         std::thread coneCollector(&BlackBox::initializeCollection, this);
         coneCollector.detach();
       }
-      std::cout<<m_typeFrame.size()<<" typeFrames to run"<<"\n";
-      std::cout<<m_typeFrameBuffer.size()<<" typeFrames in buffer"<<"\n";
+
     }
   }
   else if(a_container.dataType() == opendlv::sim::KinematicState::ID()){
@@ -350,6 +353,7 @@ void BlackBox::initializeCollection(){
       m_newDirectionId = true;
       m_newDistanceId = true;
       m_newTypeId = true;
+
     }
   }
   else {
@@ -374,6 +378,7 @@ void BlackBox::initializeCollection(){
       m_newTypeId = true;
       m_runOK = true;
     }
+    std::cout<<"Return 0"<<std::endl;
     return;
   }
   // Unpack
@@ -382,24 +387,27 @@ void BlackBox::initializeCollection(){
   float dis;
   int tpe;
   int I=0;
+
   for (std::map<double, float >::iterator it = directionFrame.begin();it !=directionFrame.end();it++){
     dir=it->second;
     extractedCones(0,I) = static_cast<double>(dir);
     I++;
   }
+
   I=0;
   for (std::map<double, float >::iterator it = distanceFrame.begin();it !=distanceFrame.end();it++){
     dis=it->second;
     extractedCones(1,I) = static_cast<double>(dis);
     I++;
   }
+
   I=0;
   for (std::map<double, int >::iterator it = typeFrame.begin();it !=typeFrame.end();it++){
     tpe=it->second;
     extractedCones(2,I) = static_cast<double>(tpe);
     I++;
   }
-  std::cout<<"extractedCones"<<extractedCones<<std::endl;
+  //std::cout<<"extractedCones"<<extractedCones<<std::endl;
   int nLeft = 0;
   int nRight = 0;
   int nSmall = 0;
@@ -417,16 +425,16 @@ void BlackBox::initializeCollection(){
       } // End of else
     } // End of for
 
-    std::cout << "members: " << nLeft << " " << nRight << " " << nSmall << " " << nBig << std::endl;
+    //std::cout << "members: " << nLeft << " " << nRight << " " << nSmall << " " << nBig << std::endl;
 
   //Initialize for next collection
   if(extractedCones.cols() > 0){
     //std::cout << "Extracted Cones " << std::endl;
     //std::cout << extractedCones << std::endl;
-
     BlackBox::sortIntoSideArrays(extractedCones, nLeft, nRight, nSmall, nBig);
   } // End of if
   m_runOK = true;
+
 } // End of initializeCollection
 
 
@@ -484,12 +492,13 @@ void BlackBox::sortIntoSideArrays(Eigen::MatrixXd extractedCones, int nLeft, int
   Eigen::ArrayXXf sideRight = coneRight_f.transpose().array();
 
   BlackBox::generateSurfaces(sideLeft, sideRight);
+  //std::cout<<"exit sortIntoSideArrays"<<std::endl;
 } // End of sortIntoSideArrays
 
 
 void BlackBox::generateSurfaces(Eigen::ArrayXXf sideLeft, Eigen::ArrayXXf sideRight){
-std::cout << "sideLeft: " << sideLeft.rows() << std::endl;
-std::cout << "sideRight: " << sideRight.rows() << std::endl;
+/*std::cout << "sideLeft: " << sideLeft.rows() << std::endl;
+std::cout << "sideRight: " << sideRight.rows() << std::endl;*/
   if(sideLeft.rows()==5 && sideRight.rows()==5){
 
     Eigen::ArrayXXd leftSide = sideLeft.cast <double> ();
@@ -534,13 +543,13 @@ std::cout << "sideRight: " << sideRight.rows() << std::endl;
     //If it loops, exit returning only fitness of 1 step
     if(m_net->activate())
     {
-      std::cout << "NET ACTIVATED" << std::endl;
+      //std::cout << "NET ACTIVATED" << std::endl;
       out_iter=m_net->outputs.begin();
       out1=(*out_iter)->activation;
       ++out_iter;
       out2=(*out_iter)->activation;
     }
-    std::cout << "OUTS: " << out1*2-1 << " and " << out2*2-1 << std::endl;
+    //std::cout << "OUTS: " << out1*2-1 << " and " << out2*2-1 << std::endl;
 
     float maxSteer = m_maxSteering;
     float maxAcc = m_maxAcceleration;
@@ -553,7 +562,7 @@ std::cout << "sideRight: " << sideRight.rows() << std::endl;
     opendlv::proxy::GroundSteeringRequest steerRequest;
     steerRequest.groundSteering(steer);
     od4.send(steerRequest);
-    std::cout << "Sent steeringRequest: " << steer << std::endl;
+    //std::cout << "Sent steeringRequest: " << steer << std::endl;
 
     //Send for Ui TODO: Remove
     opendlv::logic::action::AimPoint o4;
@@ -568,7 +577,7 @@ std::cout << "sideRight: " << sideRight.rows() << std::endl;
       opendlv::proxy::GroundAccelerationRequest accRequest;
       accRequest.groundAcceleration(acc);
       od4.send(accRequest);
-      std::cout << "Sent accelerationRequest: " << acc << std::endl;
+      //std::cout << "Sent accelerationRequest: " << acc << std::endl;
     }
     else
     {
@@ -576,13 +585,14 @@ std::cout << "sideRight: " << sideRight.rows() << std::endl;
       opendlv::proxy::GroundDecelerationRequest decRequest;
       decRequest.groundDeceleration(acc);
       od4.send(decRequest);
-      std::cout << "Sent decelerationRequest: " << acc << std::endl;
+      //std::cout << "Sent decelerationRequest: " << acc << std::endl;
     }
   }
   else
   {
   std::cout << "Not enough cones to run network" << std::endl;
   }
+    //std::cout<<"exit generateSurfaces"<<std::endl;
 } // End of generateSurfaces
 
 
