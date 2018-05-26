@@ -52,49 +52,49 @@ class BlackBox {
   void setUp();
   void tearDown();
 
-  void initializeCollection();
-  void sortIntoSideArrays(Eigen::MatrixXd, int, int, int, int);
-  void generateSurfaces(Eigen::ArrayXXf, Eigen::ArrayXXf);
-  Eigen::MatrixXd Spherical2Cartesian(double, double, double);
+  void generateSurfaces(Eigen::ArrayXXf, Eigen::ArrayXXf, Eigen::ArrayXXf globalLocation, float yaw);
+  void readMap(std::string filename);
+  void run(Eigen::ArrayXXf globalLocation, float yaw);
+  Eigen::ArrayXXf simConeDetectorSlam(Eigen::ArrayXXf globalMap, Eigen::ArrayXXf location, float heading, int nConesInFakeSlam);
+  void vehicleModel(float steeringAngle, float prevSteerAngle,float accelerationRequest, float vx,float vy, float yawRate, float dt);
+  float magicFormula(float const &a_slipAngle, float const &a_forceZ,
+      float const &a_frictionCoefficient, float const &a_cAlpha, float const &a_c,
+      float const &a_e);
 
-  std::mutex m_stateMutex;
   uint16_t m_cid;
   float m_maxSteering;
   float m_maxAcceleration;
   float m_maxDeceleration;
-  float m_receiveTimeLimit;
-  float m_vx;
-  float m_vy;
-  float m_yawRate;
+  float m_dt;
+  float m_timeLimit;
+  std::string m_mapfilename;
+  std::string m_pathFile;
+  std::string m_XYFile;
+  std::string m_CrashFile;
+  std::string m_SpeedFile;
   NEAT::Network *m_net;
-  bool m_newFrame;
-  bool m_directionOK;
-  bool m_distanceOK;
-  bool m_runOK;
-  std::map< double, float > m_directionFrame;
-  std::map< double, float > m_distanceFrame;
-  std::map< double, int > m_typeFrame;
-  std::map< double, float > m_directionFrameBuffer;
-  std::map< double, float > m_distanceFrameBuffer;
-  std::map< double, int > m_typeFrameBuffer;
-  int m_lastDirectionId;
-  int m_lastDistanceId;
-  int m_lastTypeId;
-  bool m_newDirectionId;
-  bool m_newDistanceId;
-  bool m_newTypeId;
-  std::chrono::time_point<std::chrono::system_clock> m_directionTimeReceived;
-  std::chrono::time_point<std::chrono::system_clock> m_distanceTimeReceived;
-  std::chrono::time_point<std::chrono::system_clock> m_typeTimeReceived;
-  uint64_t m_nConesInFrame;
-  int m_objectPropertyId;
-  int m_directionId;
-  int m_distanceId;
-  int m_typeId;
-  std::mutex m_directionMutex = {};
-  std::mutex m_distanceMutex = {};
-  std::mutex m_typeMutex = {};
-  int m_surfaceId;
+  Eigen::ArrayXXf m_leftCones;
+  Eigen::ArrayXXf m_rightCones;
+  Eigen::ArrayXXf m_smallCones;
+  Eigen::ArrayXXf m_bigCones;
+  bool m_orangeVisibleInSlam;
+  float m_prevSteerAngle;
+  Eigen::VectorXf m_kinematicState;
+  std::mutex m_stateMutex;
+  int m_step;
+  int m_step2;
+  bool m_OT;
+  bool m_crash;
+  int m_nOffTrack;
+  int m_nHitRight;
+  int m_nHitLeft;
+  Eigen::Vector2f m_crashLocation;
+  float m_distanceTraveledAlongPath;
+  std::vector<float> m_globalPath;
+  int m_lastClosestPointIndex;
+  int m_crashCount;
+  int m_startIndex;
+  float m_pathLength;
 
   const double DEG2RAD = 0.017453292522222; // PI/180.0
 
